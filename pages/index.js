@@ -6,10 +6,13 @@ export default function Home() {
   const [image, setImage] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [rawData, setRawData] = useState(null);
 
   const handleSubmit = async () => {
     setLoading(true);
     setError(null);
+    setImage(null);
+    setRawData(null);
     console.log("Prompt gönderiliyor:", prompt);
     try {
       const res = await fetch("/api/generate", {
@@ -18,12 +21,9 @@ export default function Home() {
         body: JSON.stringify({ prompt })
       });
 
-      if (!res.ok) {
-        throw new Error("Sunucudan geçerli yanıt alınamadı.");
-      }
-
       const data = await res.json();
       console.log("Yanıt geldi:", data);
+      setRawData(JSON.stringify(data, null, 2));
       setImage(data.image);
     } catch (err) {
       console.error("Hata oluştu:", err);
@@ -52,6 +52,12 @@ export default function Home() {
         <div style={{ marginTop: 20 }}>
           <h3>Sonuç:</h3>
           <img src={image} alt="Boyama Çıktısı" style={{ maxWidth: "100%" }} />
+        </div>
+      )}
+      {rawData && (
+        <div style={{ marginTop: 20 }}>
+          <h4>API Yanıtı (ham veri):</h4>
+          <pre>{rawData}</pre>
         </div>
       )}
     </div>
