@@ -4,7 +4,7 @@ export default async function handler(req, res) {
     return res.status(405).json({ message: "Only POST requests allowed" });
   }
 
-  const prompt = req.body.prompt;
+  const { prompt } = req.body;
 
   const response = await fetch("https://api.replicate.com/v1/predictions", {
     method: "POST",
@@ -13,11 +13,13 @@ export default async function handler(req, res) {
       "Content-Type": "application/json"
     },
     body: JSON.stringify({
-      version: "d9bae03fb50eff6fb5a5d8049b0a68ea7266edd39d4027ae47fbc39aa03fabb9",
+      version: "435061a1",
       input: {
-        prompt: `${prompt}, coloring page, white background`,
-        width: 1024,
-        height: 1024
+        prompt: `${prompt}, lineart, coloring book style, black and white`,
+        width: 512,
+        height: 512,
+        num_inference_steps: 30,
+        guidance_scale: 9
       }
     })
   });
