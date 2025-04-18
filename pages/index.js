@@ -13,7 +13,7 @@ export default function Home() {
     setError(null);
     setImage(null);
     setRawData(null);
-    console.log("Prompt gönderiliyor:", prompt);
+    console.log("Prompt gönderildi:", prompt);
     try {
       const res = await fetch("/api/generate", {
         method: "POST",
@@ -22,12 +22,17 @@ export default function Home() {
       });
 
       const data = await res.json();
-      console.log("Yanıt geldi:", data);
+      console.log("AI yanıtı:", data);
       setRawData(JSON.stringify(data, null, 2));
-      setImage(data.image);
+
+      if (data.image) {
+        setImage(data.image);
+      } else {
+        setError("Görsel oluşturulamadı. AI yanıtı eksik olabilir.");
+      }
     } catch (err) {
-      console.error("Hata oluştu:", err);
-      setError("Görsel oluşturulurken bir sorun oluştu.");
+      console.error("Hata:", err);
+      setError("Sunucuya ulaşırken bir hata oluştu.");
     } finally {
       setLoading(false);
     }
@@ -50,14 +55,14 @@ export default function Home() {
       {error && <p style={{ color: "red" }}>{error}</p>}
       {image && (
         <div style={{ marginTop: 20 }}>
-          <h3>Sonuç:</h3>
+          <h3>AI'dan gelen sonuç:</h3>
           <img src={image} alt="Boyama Çıktısı" style={{ maxWidth: "100%" }} />
         </div>
       )}
       {rawData && (
         <div style={{ marginTop: 20 }}>
-          <h4>API Yanıtı (ham veri):</h4>
-          <pre>{rawData}</pre>
+          <h4>AI Yanıtı (ham veri):</h4>
+          <pre style={{ background: '#eee', padding: 10 }}>{rawData}</pre>
         </div>
       )}
     </div>
