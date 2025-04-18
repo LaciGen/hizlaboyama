@@ -1,12 +1,13 @@
+
 export default async function handler(req, res) {
   if (req.method !== "POST") {
     return res.status(405).json({ message: "Only POST requests allowed" });
   }
 
   const { prompt } = req.body;
-  const fullPrompt = `c0l0ringb00k coloring book page, ${prompt}, white background`;
+  const fullPrompt = `${prompt}, coloring book style, black and white, line art, white background`;
 
-  const response = await fetch("https://api-inference.huggingface.co/models/renderartist/coloringbookflux", {
+  const response = await fetch("https://api-inference.huggingface.co/models/artificialguybr/ColoringBookRedmond-V2", {
     method: "POST",
     headers: {
       "Authorization": `Bearer ${process.env.HUGGINGFACE_API_TOKEN}`,

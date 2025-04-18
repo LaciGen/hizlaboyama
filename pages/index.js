@@ -53,7 +53,7 @@ export default function Home() {
     <div style={{ padding: 20 }}>
       <h1>🎨 Hızla Boyama Sayfası Oluştur</h1>
       <textarea
-        placeholder="Örnek: a cute elephant with balloons"
+        placeholder="Örnek: a cute puppy playing with a ball"
         value={prompt}
         onChange={(e) => setPrompt(e.target.value)}
         style={{ width: "100%", height: 100, fontSize: 16 }}
