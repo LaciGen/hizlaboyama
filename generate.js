@@ -13,9 +13,9 @@ export default async function handler(req, res) {
       "Content-Type": "application/json"
     },
     body: JSON.stringify({
-      version: "435061a1",
+      version: "cbaf5927",
       input: {
-        prompt: `${prompt}, lineart, coloring book style, black and white`,
+        prompt: `${prompt}, coloring book style, black and white line art`,
         width: 512,
         height: 512,
         num_inference_steps: 30,
