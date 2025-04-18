@@ -4,32 +4,25 @@ export default async function handler(req, res) {
     return res.status(405).json({ message: "Only POST requests allowed" });
   }
 
-  const prompt = req.body.prompt;
+  const { prompt } = req.body;
 
-  const response = await fetch("https://api.replicate.com/v1/predictions", {
+  const response = await fetch("https://api-inference.huggingface.co/models/YOUR_USERNAME/YOUR_MODEL_NAME", {
     method: "POST",
     headers: {
-      "Authorization": `Token ${process.env.REPLICATE_API_TOKEN}`,
+      "Authorization": `Bearer ${process.env.HUGGINGFACE_API_TOKEN}`,
       "Content-Type": "application/json"
     },
-    body: JSON.stringify({
-      version: "db21e45e40cf07fd77c263b1c16846c38511ad52f27a3b0e71b50b3e4f6d1616",
-      input: {
-        prompt: `${prompt}, black and white, lineart, coloring book style`,
-        num_inference_steps: 30,
-        guidance_scale: 9
-      }
-    })
+    body: JSON.stringify({ inputs: prompt })
   });
 
-  const result = await response.json();
-
-  if (result.error) {
-    return res.status(500).json({ error: result.error });
+  if (!response.ok) {
+    return res.status(500).json({ error: "Model API response error" });
   }
 
+  const imageBuffer = await response.arrayBuffer();
+  const base64Image = Buffer.from(imageBuffer).toString("base64");
+
   res.status(200).json({
-    image: result.output?.[0] || null,
-    full: result
+    image: `data:image/png;base64,${base64Image}`
   });
 }
